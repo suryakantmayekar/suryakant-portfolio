@@ -1,0 +1,221 @@
+@use 'variables' as *;
+@use 'mixins' as *;
+
+.site-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  transition: background $speed $ease, box-shadow $speed $ease, border-color $speed $ease,
+    backdrop-filter $speed $ease;
+  border-bottom: 1px solid transparent;
+
+  &.is-scrolled {
+    background: rgba($paper, 0.82);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-bottom-color: $line;
+    box-shadow: 0 6px 24px rgba(27, 21, 18, 0.06);
+  }
+}
+
+.nav-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  min-height: $header-h;
+}
+
+/* ---------- Brand ---------- */
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+
+  &__mark {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    flex: none;
+    font-family: $font-display;
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: $white;
+    background: linear-gradient(135deg, $accent, $accent-2);
+    border-radius: 13px;
+    box-shadow: 0 6px 16px rgba($accent, 0.3);
+  }
+
+  &__text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.25;
+
+    strong {
+      font-family: $font-display;
+      font-size: 0.98rem;
+      font-weight: 600;
+      color: $ink;
+    }
+
+    small {
+      font-size: 0.76rem;
+      color: $muted;
+    }
+  }
+
+  &--light &__text strong {
+    color: $white;
+  }
+
+  &--light &__text small {
+    color: $dark-muted;
+  }
+}
+
+/* ---------- Nav ---------- */
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+
+  &__list {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  &__link {
+    position: relative;
+    display: block;
+    padding: 10px 14px;
+    font-size: 0.92rem;
+    font-weight: 500;
+    color: $ink-2;
+    border-radius: $radius-sm;
+    transition: color $speed $ease;
+
+    &::after {
+      content: '';
+      position: absolute;
+      left: 14px;
+      right: 14px;
+      bottom: 4px;
+      height: 2px;
+      background: $accent;
+      border-radius: 2px;
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform $speed $ease;
+    }
+
+    &:hover,
+    &.is-active {
+      color: $accent-strong;
+    }
+
+    &:hover::after,
+    &.is-active::after {
+      transform: scaleX(1);
+    }
+  }
+}
+
+/* ---------- Mobile toggle ---------- */
+.nav-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 46px;
+  height: 46px;
+  padding: 12px;
+  border: 1px solid $line;
+  border-radius: 12px;
+  background: $surface;
+  z-index: 1001;
+
+  &__bar {
+    display: block;
+    width: 100%;
+    height: 2px;
+    background: $ink;
+    border-radius: 2px;
+    transition: transform $speed $ease, opacity $speed $ease;
+  }
+}
+
+// Open state (X icon)
+.nav-toggle[aria-expanded='true'] {
+  .nav-toggle__bar {
+    &:nth-child(1) {
+      transform: translateY(7px) rotate(45deg);
+    }
+    &:nth-child(2) {
+      opacity: 0;
+    }
+    &:nth-child(3) {
+      transform: translateY(-7px) rotate(-45deg);
+    }
+  }
+}
+
+/* ---------- Mobile layout ---------- */
+@include respond-max($bp-lg) {
+  .nav-toggle {
+    display: flex;
+  }
+
+  .nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    padding: calc(#{$header-h} + 20px) $gutter 28px;
+    background: $paper;
+    border-bottom: 1px solid $line;
+    box-shadow: $shadow-lg;
+    transform: translateY(-110%);
+    opacity: 0;
+    visibility: hidden;
+    transition: transform 0.4s $ease, opacity 0.3s $ease, visibility 0.4s;
+
+    &.is-open {
+      transform: translateY(0);
+      opacity: 1;
+      visibility: visible;
+    }
+
+    &__list {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 2px;
+    }
+
+    &__link {
+      padding: 14px 12px;
+      font-size: 1.05rem;
+      border-bottom: 1px solid $line;
+      border-radius: 0;
+
+      &::after {
+        display: none;
+      }
+    }
+
+    &__cta {
+      margin-top: 12px;
+    }
+  }
+
+  body.menu-open {
+    overflow: hidden;
+  }
+}

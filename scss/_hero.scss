@@ -1,0 +1,302 @@
+@use 'variables' as *;
+@use 'mixins' as *;
+
+.hero {
+  position: relative;
+  padding-top: calc(#{$header-h} + clamp(48px, 8vw, 96px));
+  padding-bottom: clamp(56px, 8vw, 96px);
+  overflow: hidden;
+
+  &__glow {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(70px);
+    pointer-events: none;
+    z-index: 0;
+
+    &--1 {
+      top: -140px;
+      right: -120px;
+      width: 480px;
+      height: 480px;
+      background: radial-gradient(circle, rgba($accent-2, 0.22), transparent 65%);
+    }
+
+    &--2 {
+      bottom: -180px;
+      left: -160px;
+      width: 420px;
+      height: 420px;
+      background: radial-gradient(circle, rgba($accent, 0.14), transparent 65%);
+    }
+  }
+
+  &__grid {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+    gap: clamp(40px, 6vw, 80px);
+    align-items: center;
+  }
+
+  &__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 16px;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: $ink-2;
+    background: $surface;
+    border: 1px solid $line;
+    border-radius: $radius-pill;
+    box-shadow: $shadow-sm;
+  }
+
+  &__hello {
+    margin-top: 26px;
+    font-family: $font-display;
+    font-size: 1.05rem;
+    color: $muted;
+
+    strong {
+      color: $ink;
+      font-weight: 600;
+    }
+  }
+
+  &__title {
+    margin-top: 10px;
+    font-size: clamp(2.15rem, 1.3rem + 3.6vw, 3.9rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+  }
+
+  &__lede {
+    margin-top: 22px;
+    max-width: 56ch;
+    font-size: clamp(1.02rem, 0.97rem + 0.35vw, 1.17rem);
+    color: $muted;
+
+    strong {
+      color: $ink;
+      font-weight: 600;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-top: 34px;
+  }
+
+  &__stats {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+    margin-top: 48px;
+    padding-top: 30px;
+    border-top: 1px solid $line;
+  }
+}
+
+.stat {
+  &__value {
+    font-family: $font-display;
+    font-size: clamp(1.25rem, 1.05rem + 0.8vw, 1.7rem);
+    font-weight: 700;
+    color: $ink;
+    letter-spacing: -0.02em;
+  }
+
+  &__label {
+    margin-top: 4px;
+    font-size: 0.8rem;
+    line-height: 1.45;
+    color: $muted;
+  }
+}
+
+/* ---------- Profile card ---------- */
+.hero__visual {
+  position: relative;
+}
+
+.hero-card {
+  position: relative;
+  padding: clamp(26px, 4vw, 36px);
+  background: $surface;
+  border: 1px solid $line;
+  border-radius: $radius-lg;
+  box-shadow: $shadow;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(160deg, rgba($accent, 0.06), transparent 45%);
+    pointer-events: none;
+  }
+
+  &__top {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  &__mark {
+    display: grid;
+    place-items: center;
+    width: 68px;
+    height: 68px;
+    font-family: $font-display;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: $white;
+    background: linear-gradient(135deg, $accent, $accent-2);
+    border-radius: 20px;
+    box-shadow: 0 10px 24px rgba($accent, 0.32);
+  }
+
+  &__status {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 14px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #1c6b4a;
+    background: #e5f4ec;
+    border-radius: $radius-pill;
+  }
+
+  &__name {
+    position: relative;
+    margin-top: 22px;
+    font-family: $font-display;
+    font-size: 1.45rem;
+    font-weight: 700;
+    color: $ink;
+    letter-spacing: -0.02em;
+  }
+
+  &__role {
+    position: relative;
+    margin-top: 6px;
+    font-size: 0.92rem;
+    color: $accent-strong;
+    font-weight: 500;
+  }
+
+  &__meta {
+    position: relative;
+    display: grid;
+    gap: 8px;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px dashed $line;
+    font-size: 0.88rem;
+    color: $muted;
+  }
+
+  &__tags {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 22px;
+
+    span {
+      padding: 7px 13px;
+      font-family: $font-display;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      color: $ink-2;
+      background: $paper-2;
+      border: 1px solid $line;
+      border-radius: $radius-pill;
+    }
+  }
+}
+
+/* ---------- Floating chips ---------- */
+.float-chip {
+  position: absolute;
+  padding: 11px 18px;
+  font-family: $font-display;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: $ink;
+  background: $surface;
+  border: 1px solid $line;
+  border-radius: $radius-pill;
+  box-shadow: $shadow;
+  animation: float 5.5s ease-in-out infinite;
+  white-space: nowrap;
+
+  &--1 {
+    top: -20px;
+    left: -26px;
+    color: $accent-strong;
+    background: $accent-soft;
+    border-color: rgba($accent, 0.25);
+  }
+
+  &--2 {
+    bottom: 32px;
+    right: -30px;
+    animation-delay: -2.6s;
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+}
+
+/* ---------- Responsive ---------- */
+@include respond-max($bp-lg) {
+  .hero__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hero__visual {
+    max-width: 480px;
+  }
+
+  .float-chip--1 {
+    left: -8px;
+  }
+
+  .float-chip--2 {
+    right: -8px;
+  }
+}
+
+@include respond-max($bp-md) {
+  .hero__stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 22px 12px;
+  }
+}
+
+@include respond-max($bp-sm) {
+  .hero__actions .btn {
+    width: 100%;
+  }
+
+  .float-chip {
+    display: none;
+  }
+}

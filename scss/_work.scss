@@ -1,0 +1,116 @@
+@use 'variables' as *;
+@use 'mixins' as *;
+
+.featured-work {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px;
+
+  @include respond-max($bp-md) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.project-card {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: clamp(26px, 3.4vw, 38px);
+  background: $surface;
+  border: 1px solid $line;
+  border-radius: $radius-lg;
+  transition: transform $speed $ease, box-shadow $speed $ease;
+
+  &:hover {
+    transform: translateY(-6px);
+    box-shadow: $shadow-lg;
+  }
+
+  &__head {
+    position: relative;
+    padding-bottom: 20px;
+    border-bottom: 1px solid $line;
+  }
+
+  &__flag {
+    display: inline-block;
+    padding: 5px 12px;
+    margin-bottom: 14px;
+    font-family: $font-display;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: $accent-strong;
+    background: $accent-soft;
+    border-radius: $radius-pill;
+  }
+
+  &__title {
+    font-size: clamp(1.35rem, 1.15rem + 0.7vw, 1.7rem);
+  }
+
+  &__type {
+    margin-top: 6px;
+    font-size: 0.92rem;
+    color: $muted;
+  }
+
+  .tag-row {
+    margin-top: auto;
+  }
+}
+
+/* ---------- Other work ---------- */
+.other-work {
+  margin-top: clamp(40px, 6vw, 60px);
+
+  &__title {
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+
+    @include respond-max($bp-lg) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    @include respond-max($bp-sm) {
+      grid-template-columns: 1fr;
+    }
+  }
+}
+
+.work-chip {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 18px 22px;
+  background: $surface;
+  border: 1px solid $line;
+  border-radius: $radius;
+  transition: transform $speed $ease, border-color $speed $ease, box-shadow $speed $ease;
+
+  strong {
+    font-family: $font-display;
+    font-size: 0.98rem;
+    font-weight: 600;
+    color: $ink;
+  }
+
+  span {
+    font-size: 0.82rem;
+    color: $muted;
+  }
+
+  &:hover {
+    transform: translateY(-3px);
+    border-color: rgba($accent, 0.35);
+    box-shadow: $shadow-sm;
+  }
+}

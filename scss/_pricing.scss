@@ -1,0 +1,107 @@
+@use 'variables' as *;
+@use 'mixins' as *;
+
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
+  align-items: start;
+
+  @include respond-max($bp-xl) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  @include respond-max($bp-sm) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.price-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  height: 100%;
+  padding: 30px 26px;
+  background: $surface;
+  border: 1px solid $line;
+  border-radius: $radius-lg;
+  transition: transform $speed $ease, box-shadow $speed $ease, border-color $speed $ease;
+
+  &:hover {
+    transform: translateY(-6px);
+    box-shadow: $shadow-lg;
+    border-color: rgba($accent, 0.35);
+  }
+
+  &__head {
+    padding-bottom: 18px;
+    border-bottom: 1px solid $line;
+  }
+
+  &__name {
+    font-size: 1.18rem;
+    font-weight: 700;
+  }
+
+  &__for {
+    margin-top: 8px;
+    font-size: 0.86rem;
+    line-height: 1.55;
+    color: $muted;
+  }
+
+  &__price {
+    font-size: 0.95rem;
+    color: $muted;
+
+    strong {
+      display: block;
+      margin-top: 2px;
+      font-family: $font-display;
+      font-size: clamp(1.7rem, 1.4rem + 1vw, 2.15rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: $ink;
+      line-height: 1.1;
+    }
+  }
+
+  &__per {
+    font-size: 0.95rem;
+    color: $muted;
+  }
+
+  .tick-list {
+    font-size: 0.9rem;
+  }
+
+  .btn {
+    margin-top: auto;
+  }
+
+  // ---- Featured ----
+  &--featured {
+    border-color: rgba($accent, 0.45);
+    box-shadow: $shadow;
+    background: linear-gradient(180deg, rgba($accent-soft, 0.55), $surface 220px);
+  }
+
+  &__badge {
+    position: absolute;
+    top: -13px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 6px 16px;
+    font-family: $font-display;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: $white;
+    background: linear-gradient(135deg, $accent, $accent-2);
+    border-radius: $radius-pill;
+    box-shadow: 0 6px 16px rgba($accent, 0.35);
+    white-space: nowrap;
+  }
+}

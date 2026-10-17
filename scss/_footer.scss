@@ -1,0 +1,50 @@
+@use 'variables' as *;
+@use 'mixins' as *;
+
+.site-footer {
+  background: $dark;
+  color: $dark-muted;
+  border-top: 1px solid $dark-line;
+  padding-block: 48px 28px;
+
+  &__grid {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 32px;
+    padding-bottom: 32px;
+    border-bottom: 1px solid $dark-line;
+  }
+
+  &__brand p {
+    margin-top: 16px;
+    max-width: 40ch;
+    font-size: 0.88rem;
+  }
+
+  &__nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 22px;
+
+    a {
+      font-size: 0.9rem;
+      transition: color $speed $ease;
+
+      &:hover {
+        color: $accent-2;
+      }
+    }
+  }
+
+  &__bottom {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 8px 24px;
+    padding-top: 24px;
+    font-size: 0.8rem;
+    opacity: 0.8;
+  }
+}

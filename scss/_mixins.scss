@@ -1,0 +1,42 @@
+@use 'variables' as *;
+
+// Responsive breakpoint mixin
+@mixin respond($bp) {
+  @if $bp == sm {
+    @media (min-width: $bp-sm) {
+      @content;
+    }
+  } @else if $bp == md {
+    @media (min-width: $bp-md) {
+      @content;
+    }
+  } @else if $bp == lg {
+    @media (min-width: $bp-lg) {
+      @content;
+    }
+  } @else if $bp == xl {
+    @media (min-width: $bp-xl) {
+      @content;
+    }
+  }
+}
+
+// Max-width media query (mobile-first escape hatch)
+@mixin respond-max($bp) {
+  @media (max-width: $bp) {
+    @content;
+  }
+}
+
+// Accessible focus ring
+@mixin focus-ring {
+  outline: 3px solid rgba($accent, 0.45);
+  outline-offset: 3px;
+}
+
+// Truncate to one line
+@mixin truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

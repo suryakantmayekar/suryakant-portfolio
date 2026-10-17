@@ -1,0 +1,155 @@
+@use 'variables' as *;
+@use 'mixins' as *;
+
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px;
+
+  @include respond-max($bp-md) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.service-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: clamp(26px, 3.4vw, 36px);
+  background: $surface;
+  border: 1px solid $line;
+  border-radius: $radius-lg;
+  transition: transform $speed $ease, box-shadow $speed $ease, border-color $speed $ease;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 32px;
+    right: 32px;
+    height: 3px;
+    background: linear-gradient(90deg, $accent, $accent-2);
+    border-radius: 0 0 4px 4px;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.35s $ease;
+  }
+
+  &:hover {
+    transform: translateY(-6px);
+    border-color: rgba($accent, 0.35);
+    box-shadow: $shadow-lg;
+
+    &::before {
+      transform: scaleX(1);
+    }
+  }
+
+  &__icon {
+    display: grid;
+    place-items: center;
+    width: 54px;
+    height: 54px;
+    border-radius: 16px;
+    background: $accent-soft;
+
+    svg {
+      width: 26px;
+      height: 26px;
+      fill: none;
+      stroke: $accent;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+  }
+
+  &__title {
+    font-size: 1.28rem;
+    font-weight: 700;
+  }
+
+  &__text {
+    font-size: 0.96rem;
+    color: $muted;
+  }
+
+  // wide project-management card
+  &--wide {
+    grid-column: 1 / -1;
+    background: linear-gradient(135deg, $dark, $dark-2);
+    border-color: $dark-line;
+
+    &:hover {
+      border-color: rgba($accent-2, 0.5);
+    }
+
+    &::before {
+      display: none;
+    }
+
+    .service-card__title {
+      color: $white;
+    }
+
+    .service-card__text {
+      color: $dark-muted;
+      max-width: 62ch;
+    }
+
+    .service-card__icon {
+      background: rgba($accent-2, 0.18);
+
+      svg {
+        stroke: $accent-2;
+      }
+    }
+
+    &__inner {
+      display: flex;
+      align-items: flex-start;
+      gap: 20px;
+    }
+
+    @include respond-max($bp-sm) {
+      &__inner {
+        flex-direction: column;
+      }
+    }
+  }
+}
+
+/* ---------- Mini lifecycle flow ---------- */
+.mini-flow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 6px;
+  margin-top: 8px;
+
+  li {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 14px;
+    font-family: $font-display;
+    font-size: 0.76rem;
+    font-weight: 600;
+    color: $white;
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid $dark-line;
+    border-radius: $radius-pill;
+
+    &::after {
+      content: '\2192';
+      margin-left: 4px;
+      color: $accent-2;
+      font-weight: 400;
+    }
+
+    &:last-child::after {
+      content: none;
+    }
+  }
+}

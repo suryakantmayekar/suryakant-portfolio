@@ -1,0 +1,14 @@
+{
+  "name": "suryakant-mayekar-profile",
+  "version": "1.0.0",
+  "description": "Client-facing freelance profile website for Suryakant Mayekar — Senior Web Development & Digital Solutions Consultant.",
+  "private": true,
+  "scripts": {
+    "build": "sass scss/main.scss css/main.css --style=expanded --no-source-map",
+    "dev": "sass --watch scss/main.scss css/main.css --style=expanded",
+    "serve": "npx --yes serve ."
+  },
+  "devDependencies": {
+    "sass": "^1.77.0"
+  }
+}

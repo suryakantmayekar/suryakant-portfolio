@@ -1,0 +1,84 @@
+@use 'variables' as *;
+@use 'mixins' as *;
+
+.marquee {
+  position: relative;
+  padding-block: 22px;
+  background: $surface;
+  border-block: 1px solid $line;
+  overflow: hidden;
+
+  // fade edges
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 90px;
+    z-index: 1;
+    pointer-events: none;
+
+    @include respond-max($bp-sm) {
+      width: 40px;
+    }
+  }
+
+  &::before {
+    left: 0;
+    background: linear-gradient(90deg, $surface, transparent);
+  }
+
+  &::after {
+    right: 0;
+    background: linear-gradient(270deg, $surface, transparent);
+  }
+
+  &__track {
+    display: flex;
+    width: max-content;
+    animation: marquee 38s linear infinite;
+  }
+
+  &:hover &__track {
+    animation-play-state: paused;
+  }
+
+  &__list {
+    display: flex;
+    align-items: center;
+    gap: 34px;
+    padding-right: 34px;
+    flex: none;
+
+    li {
+      font-family: $font-display;
+      font-size: 0.92rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      color: $ink-2;
+      white-space: nowrap;
+
+      // star separators
+      &:nth-child(even) {
+        font-size: 0.7rem;
+        color: $accent-2;
+      }
+    }
+  }
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee__track {
+    animation: none;
+  }
+}
