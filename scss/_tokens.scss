@@ -1,0 +1,42 @@
+// ============================================================
+// V2 — Dark editorial theme (black / gray / #455CE9)
+// ============================================================
+
+$bg: #07080b;
+$bg-2: #0b0d12;
+$surface: #10131a;
+$surface-2: #151922;
+
+$text: #f2f3f7;
+$muted: #8b919d;
+$muted-2: #6d7380;
+
+$line: rgba(255, 255, 255, 0.09);
+$line-strong: rgba(255, 255, 255, 0.18);
+
+$blue: #455ce9;
+$blue-hover: #5a6ef0;
+$blue-light: #8a9bff;
+$blue-soft: rgba(69, 92, 233, 0.13);
+$blue-line: rgba(69, 92, 233, 0.45);
+
+$white: #fff;
+$black: #000;
+$green: #3ddc97;
+
+$font-display: 'Space Grotesk', system-ui, -apple-system, 'Segoe UI', sans-serif;
+$font-body: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+$container: 1240px;
+$gutter: clamp(20px, 4.5vw, 44px);
+$header-h: 84px;
+
+$r-sm: 6px;
+$r: 10px;
+$r-lg: 16px;
+
+$ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+
+$bp-md: 768px;
+$bp-lg: 1024px;
+$bp-xl: 1200px;

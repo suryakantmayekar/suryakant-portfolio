@@ -1,4 +1,7 @@
 node_modules/
 css/main.css.map
+v3/css/main.css.map
 .netlify/
+review/
 .DS_Store
+*.jfif

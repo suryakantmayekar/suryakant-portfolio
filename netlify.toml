@@ -27,6 +27,26 @@
     Cache-Control = "public, max-age=31536000, immutable"
 
 [[headers]]
+  for = "/v3/css/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/v3/js/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
   for = "/scss/*"
+  [headers.values]
+    X-Robots-Tag = "noindex"
+
+[[headers]]
+  for = "/v3/scss/*"
+  [headers.values]
+    X-Robots-Tag = "noindex"
+
+[[headers]]
+  for = "/scripts/*"
   [headers.values]
     X-Robots-Tag = "noindex"

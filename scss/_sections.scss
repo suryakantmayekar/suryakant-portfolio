@@ -1,0 +1,581 @@
+@use 'tokens' as *;
+
+/* ============ Ticker ============ */
+.ticker {
+  position: relative;
+  overflow: hidden;
+  background: $blue;
+  border-block: 1px solid rgba(255, 255, 255, 0.15);
+
+  &__track {
+    display: flex;
+    width: max-content;
+    animation: ticker 36s linear infinite;
+  }
+
+  &:hover &__track {
+    animation-play-state: paused;
+  }
+
+  &__group {
+    display: flex;
+    align-items: center;
+    gap: 26px;
+    padding: 13px 13px 13px 26px;
+    flex: none;
+
+    span {
+      font-family: $font-display;
+      font-size: 0.76rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: $white;
+      white-space: nowrap;
+    }
+
+    .sep {
+      opacity: 0.5;
+    }
+  }
+}
+
+@keyframes ticker {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* ============ Stats ============ */
+.stats {
+  border-bottom: 1px solid $line;
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.stat {
+  padding: 32px 30px 32px 0;
+  border-right: 1px solid $line;
+
+  &:not(:first-child) {
+    padding-left: 30px;
+  }
+
+  &:last-child {
+    border-right: 0;
+  }
+
+  strong {
+    display: block;
+    font-family: $font-display;
+    font-size: clamp(2.1rem, 1.5rem + 2.2vw, 3rem);
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+  }
+
+  // caption under the number only (direct child) — never the counter inside <strong>
+  > span {
+    display: block;
+    margin-top: 5px;
+    font-size: 0.8rem;
+    color: $muted;
+  }
+}
+
+/* ============ Services (numbered rows) ============ */
+.service-list {
+  border-top: 1px solid $line;
+}
+
+.service {
+  position: relative;
+  display: grid;
+  grid-template-columns: 72px minmax(0, 1fr) minmax(0, 0.95fr);
+  gap: clamp(16px, 3vw, 40px);
+  padding: clamp(24px, 3.2vw, 38px) 20px clamp(24px, 3.2vw, 38px) 28px;
+  border-bottom: 1px solid $line;
+  transition: background 0.35s $ease;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 12px;
+    bottom: 12px;
+    left: 0;
+    width: 2px;
+    background: $blue;
+    transform: scaleY(0);
+    transform-origin: top;
+    transition: transform 0.4s $ease;
+  }
+
+  &:hover {
+    background: linear-gradient(90deg, rgba($blue, 0.07), transparent 70%);
+
+    &::before {
+      transform: scaleY(1);
+    }
+
+    h3 {
+      color: $blue-light;
+    }
+  }
+
+  &__num {
+    padding-top: 5px;
+    font-family: $font-display;
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    color: $muted-2;
+  }
+
+  h3 {
+    font-size: clamp(1.15rem, 1.5vw, 1.5rem);
+    font-weight: 500;
+    transition: color 0.3s $ease;
+  }
+
+  p {
+    margin-top: 8px;
+    max-width: 54ch;
+    font-size: 0.92rem;
+    color: $muted;
+  }
+
+  .tags {
+    align-content: start;
+    justify-content: flex-end;
+  }
+}
+
+/* ============ Work ============ */
+.work {
+  display: grid;
+  gap: 18px;
+}
+
+.work-item {
+  display: grid;
+  grid-template-columns: 110px minmax(0, 1fr);
+  gap: clamp(18px, 3vw, 30px);
+  padding: clamp(26px, 3.6vw, 42px);
+  border: 1px solid $line;
+  border-radius: $r-lg;
+  background: linear-gradient(165deg, $surface, rgba($surface, 0) 72%);
+  transition: border-color 0.3s $ease, transform 0.3s $ease;
+
+  &:hover {
+    border-color: $blue-line;
+    transform: translateY(-4px);
+  }
+
+  &__no {
+    font-family: $font-display;
+    font-size: clamp(1.9rem, 3vw, 2.6rem);
+    font-weight: 600;
+    line-height: 1;
+    color: rgba(255, 255, 255, 0.12);
+  }
+
+  &__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    font-family: $font-display;
+    font-size: 0.68rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: $blue-light;
+  }
+
+  h3 {
+    margin-top: 12px;
+    font-size: clamp(1.5rem, 2.4vw, 2rem);
+    font-weight: 500;
+  }
+
+  &__sub {
+    margin-top: 6px;
+    font-size: 0.88rem;
+    color: $muted;
+  }
+
+  &__points {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 7px 22px;
+    margin-top: 20px;
+    font-size: 0.84rem;
+    color: $muted;
+
+    li {
+      position: relative;
+      padding-left: 16px;
+
+      &::before {
+        content: '+';
+        position: absolute;
+        left: 0;
+        color: $blue;
+      }
+    }
+  }
+
+  .tags {
+    margin-top: 24px;
+  }
+}
+
+/* ============ Other work ============ */
+.other {
+  margin-top: clamp(40px, 5vw, 60px);
+
+  h3 {
+    margin-bottom: 10px;
+    font-family: $font-display;
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: $muted-2;
+  }
+
+  ul {
+    border-top: 1px solid $line;
+  }
+
+  li {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 14px 0;
+    border-bottom: 1px solid $line;
+    font-family: $font-display;
+    font-size: 0.98rem;
+    transition: color 0.25s $ease, padding-left 0.25s $ease;
+
+    span:last-child {
+      font-family: $font-body;
+      font-size: 0.8rem;
+      color: $muted;
+    }
+
+    &:hover {
+      color: $blue-light;
+      padding-left: 6px;
+    }
+  }
+}
+
+/* ============ Process ============ */
+.steps {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: clamp(30px, 5vw, 70px);
+}
+
+.step {
+  display: grid;
+  grid-template-columns: 46px 1fr;
+  gap: 14px;
+  padding: 22px 0;
+  border-top: 1px solid $line;
+
+  &__num {
+    padding-top: 4px;
+    font-family: $font-display;
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    color: $blue;
+  }
+
+  h3 {
+    font-size: 1rem;
+    font-weight: 500;
+  }
+
+  p {
+    margin-top: 6px;
+    font-size: 0.85rem;
+    color: $muted;
+  }
+}
+
+/* ============ Why me (sticky intro) ============ */
+.why {
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  gap: clamp(40px, 6vw, 90px);
+  align-items: start;
+
+  &__intro {
+    position: sticky;
+    top: calc(#{$header-h} + 40px);
+
+    h2 {
+      margin-top: 14px;
+      font-size: clamp(2rem, 3.6vw, 3.2rem);
+    }
+
+    p {
+      margin-top: 18px;
+      max-width: 42ch;
+      color: $muted;
+    }
+  }
+
+  &__list {
+    border-top: 1px solid $line;
+
+    li {
+      display: grid;
+      grid-template-columns: 54px 1fr;
+      gap: 18px;
+      padding: clamp(24px, 3vw, 34px) 0;
+      border-bottom: 1px solid $line;
+    }
+
+    span {
+      padding-top: 4px;
+      font-family: $font-display;
+      font-size: 0.8rem;
+      letter-spacing: 0.06em;
+      color: $blue-light;
+    }
+
+    h3 {
+      font-size: 1.15rem;
+      font-weight: 500;
+    }
+
+    p {
+      margin-top: 8px;
+      font-size: 0.9rem;
+      color: $muted;
+    }
+  }
+}
+
+.skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 28px;
+}
+
+/* ============ Pricing ============ */
+.prices {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.price {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: clamp(24px, 3vw, 34px);
+  border: 1px solid $line;
+  border-radius: $r-lg;
+  background: $surface;
+  transition: border-color 0.3s $ease, transform 0.3s $ease;
+
+  &:hover {
+    border-color: $line-strong;
+    transform: translateY(-3px);
+  }
+
+  &--featured {
+    border-color: $blue-line;
+    background: linear-gradient(180deg, rgba($blue, 0.11), $surface 62%);
+
+    .price__amount {
+      color: $blue-light;
+    }
+  }
+
+  &__badge {
+    display: inline-block;
+    align-self: flex-start;
+    margin-bottom: 14px;
+    padding: 5px 11px;
+    font-family: $font-display;
+    font-size: 0.6rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: $white;
+    background: $blue;
+    border-radius: 100px;
+  }
+
+  &__top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  h3 {
+    font-size: 1.08rem;
+    font-weight: 500;
+    padding-top: 3px;
+  }
+
+  &__amount {
+    font-family: $font-display;
+    font-size: clamp(1.3rem, 2vw, 1.65rem);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    white-space: nowrap;
+
+    small {
+      display: block;
+      margin-bottom: 2px;
+      font-family: $font-body;
+      font-size: 0.62rem;
+      font-weight: 400;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      text-align: right;
+      color: $muted-2;
+    }
+  }
+
+  &__desc {
+    margin-top: 12px;
+    font-size: 0.85rem;
+    color: $muted;
+  }
+
+  ul {
+    display: grid;
+    gap: 8px;
+    margin-top: 18px;
+    padding-top: 16px;
+    border-top: 1px solid $line;
+    font-size: 0.85rem;
+    color: $muted;
+  }
+
+  li {
+    position: relative;
+    padding-left: 18px;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0.48em;
+      left: 0;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: $blue;
+    }
+  }
+
+  .btn {
+    margin-top: 26px;
+  }
+}
+
+/* ============ Footer ============ */
+.foot {
+  border-top: 1px solid $line;
+  padding-block: 30px;
+
+  &__inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    font-size: 0.78rem;
+    color: $muted-2;
+  }
+
+  a {
+    transition: color 0.2s $ease;
+
+    &:hover {
+      color: $blue-light;
+    }
+  }
+
+  &__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+}
+
+/* ============ Responsive ============ */
+@media (max-width: $bp-lg) {
+  .why {
+    grid-template-columns: 1fr;
+
+    &__intro {
+      position: static;
+    }
+  }
+}
+
+@media (max-width: $bp-md) {
+  .stats__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .stat {
+    padding: 24px 16px 24px 0;
+    border-bottom: 1px solid $line;
+
+    &:nth-child(odd) {
+      padding-left: 0;
+      padding-right: 16px;
+    }
+
+    &:nth-child(even) {
+      padding-left: 16px;
+      border-right: 0;
+    }
+
+    &:nth-last-child(-n + 2) {
+      border-bottom: 0;
+    }
+  }
+
+  .service {
+    grid-template-columns: 42px minmax(0, 1fr);
+    padding-left: 20px;
+    padding-right: 12px;
+
+    .tags {
+      grid-column: 2;
+      justify-content: flex-start;
+    }
+  }
+
+  .work-item {
+    grid-template-columns: 1fr;
+
+    &__no {
+      font-size: 1.6rem;
+    }
+
+    &__points {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .steps {
+    grid-template-columns: 1fr;
+  }
+
+  .prices {
+    grid-template-columns: 1fr;
+  }
+}

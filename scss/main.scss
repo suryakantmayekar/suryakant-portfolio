@@ -1,19 +1,12 @@
 // ============================================================
-// Suryakant Mayekar — Freelance Profile
-// Main stylesheet entry point
-// Compile: npm run build  |  Watch: npm run dev
+// V2 — Dark editorial theme
+// Compile: npm run build:v2  |  Watch: npm run dev:v2
 // ============================================================
 
 @use 'base';
-@use 'buttons';
-@use 'nav';
+@use 'components';
+@use 'header';
 @use 'hero';
-@use 'marquee';
-@use 'services';
-@use 'process';
-@use 'work';
-@use 'why';
-@use 'pricing';
+@use 'sections';
 @use 'contact';
-@use 'footer';
-@use 'animations';
+@use 'motion';

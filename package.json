@@ -1,14 +1,19 @@
 {
   "name": "suryakant-mayekar-profile",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Client-facing freelance profile website for Suryakant Mayekar — Senior Web Development & Digital Solutions Consultant.",
   "private": true,
   "scripts": {
-    "build": "sass scss/main.scss css/main.css --style=expanded --no-source-map",
+    "build": "sass scss/main.scss css/main.css --style=expanded --no-source-map && sass v3/scss/main.scss v3/css/main.css --style=expanded --no-source-map",
+    "build:main": "sass scss/main.scss css/main.css --style=expanded --no-source-map",
+    "build:v3": "sass v3/scss/main.scss v3/css/main.css --style=expanded --no-source-map",
     "dev": "sass --watch scss/main.scss css/main.css --style=expanded",
-    "serve": "npx --yes serve ."
+    "dev:v3": "sass --watch v3/scss/main.scss v3/css/main.css --style=expanded",
+    "serve": "node scripts/preview.mjs",
+    "check:ui": "node scripts/check-ui.mjs"
   },
   "devDependencies": {
+    "playwright-core": "^1.56.1",
     "sass": "^1.77.0"
   }
 }

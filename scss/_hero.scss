@@ -1,302 +1,236 @@
-@use 'variables' as *;
-@use 'mixins' as *;
+@use 'tokens' as *;
 
 .hero {
   position: relative;
-  padding-top: calc(#{$header-h} + clamp(48px, 8vw, 96px));
-  padding-bottom: clamp(56px, 8vw, 96px);
-  overflow: hidden;
+  padding-top: calc(#{$header-h} + clamp(40px, 7vh, 84px));
+  overflow: clip;
 
-  &__glow {
+  // faint blueprint grid
+  &__gridbg {
     position: absolute;
-    border-radius: 50%;
-    filter: blur(70px);
+    inset: 0;
     pointer-events: none;
-    z-index: 0;
-
-    &--1 {
-      top: -140px;
-      right: -120px;
-      width: 480px;
-      height: 480px;
-      background: radial-gradient(circle, rgba($accent-2, 0.22), transparent 65%);
-    }
-
-    &--2 {
-      bottom: -180px;
-      left: -160px;
-      width: 420px;
-      height: 420px;
-      background: radial-gradient(circle, rgba($accent, 0.14), transparent 65%);
-    }
+    background-image: linear-gradient($line 1px, transparent 1px),
+      linear-gradient(90deg, $line 1px, transparent 1px);
+    background-size: 78px 78px;
+    opacity: 0.55;
+    mask-image: radial-gradient(ellipse 70% 65% at 35% 25%, #000 0%, transparent 75%);
+    -webkit-mask-image: radial-gradient(ellipse 70% 65% at 35% 25%, #000 0%, transparent 75%);
   }
 
-  &__grid {
+  &__inner {
     position: relative;
     z-index: 1;
     display: grid;
-    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
-    gap: clamp(40px, 6vw, 80px);
+    grid-template-columns: minmax(0, 1.18fr) minmax(0, 0.82fr);
     align-items: center;
-  }
-
-  &__badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    padding: 9px 16px;
-    font-size: 0.82rem;
-    font-weight: 500;
-    color: $ink-2;
-    background: $surface;
-    border: 1px solid $line;
-    border-radius: $radius-pill;
-    box-shadow: $shadow-sm;
-  }
-
-  &__hello {
-    margin-top: 26px;
-    font-family: $font-display;
-    font-size: 1.05rem;
-    color: $muted;
-
-    strong {
-      color: $ink;
-      font-weight: 600;
-    }
-  }
-
-  &__title {
-    margin-top: 10px;
-    font-size: clamp(2.15rem, 1.3rem + 3.6vw, 3.9rem);
-    font-weight: 800;
-    letter-spacing: -0.03em;
+    gap: clamp(40px, 6vw, 90px);
+    padding-bottom: clamp(48px, 7vw, 88px);
   }
 
   &__lede {
-    margin-top: 22px;
-    max-width: 56ch;
-    font-size: clamp(1.02rem, 0.97rem + 0.35vw, 1.17rem);
+    margin-top: 26px;
+    max-width: 54ch;
+    font-size: clamp(1rem, 0.95rem + 0.25vw, 1.1rem);
     color: $muted;
 
     strong {
-      color: $ink;
-      font-weight: 600;
+      color: $text;
+      font-weight: 500;
     }
   }
 
-  &__actions {
+  &__cta {
     display: flex;
     flex-wrap: wrap;
-    gap: 14px;
+    align-items: center;
+    gap: 26px;
     margin-top: 34px;
   }
 
-  &__stats {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 12px;
-    margin-top: 48px;
-    padding-top: 30px;
+  &__stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 22px;
+    max-width: 560px;
+    margin-top: clamp(36px, 5vw, 54px);
+    padding-top: 22px;
     border-top: 1px solid $line;
-  }
-}
-
-.stat {
-  &__value {
     font-family: $font-display;
-    font-size: clamp(1.25rem, 1.05rem + 0.8vw, 1.7rem);
-    font-weight: 700;
-    color: $ink;
-    letter-spacing: -0.02em;
-  }
-
-  &__label {
-    margin-top: 4px;
-    font-size: 0.8rem;
-    line-height: 1.45;
+    font-size: 0.78rem;
+    letter-spacing: 0.04em;
     color: $muted;
+
+    li {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+
+      &::before {
+        content: '';
+        width: 4px;
+        height: 4px;
+        border-radius: 50%;
+        background: $blue;
+      }
+    }
   }
-}
 
-/* ---------- Profile card ---------- */
-.hero__visual {
-  position: relative;
-}
+  &__foot {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding-block: 20px;
+    border-top: 1px solid $line;
+    font-family: $font-display;
+    font-size: 0.68rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: $muted-2;
+  }
 
-.hero-card {
-  position: relative;
-  padding: clamp(26px, 4vw, 36px);
-  background: $surface;
-  border: 1px solid $line;
-  border-radius: $radius-lg;
-  box-shadow: $shadow;
+  &__line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, $blue, transparent);
+  }
 
-  &::before {
+  // pointer-follow glow (JS sets --mx / --my)
+  &::after {
     content: '';
     position: absolute;
     inset: 0;
-    border-radius: inherit;
-    background: linear-gradient(160deg, rgba($accent, 0.06), transparent 45%);
     pointer-events: none;
+    background: radial-gradient(
+      460px circle at var(--mx, 40%) var(--my, 30%),
+      rgba($blue, 0.16),
+      transparent 62%
+    );
+    opacity: 0;
+    transition: opacity 0.5s $ease;
+    z-index: 0;
   }
 
-  &__top {
+  &:hover::after {
+    opacity: 1;
+  }
+}
+
+/* ---------- Huge headline ---------- */
+.mega {
+  margin-top: 22px;
+  font-size: clamp(2.4rem, 1.1rem + 4.4vw, 4.9rem);
+  font-weight: 500;
+  line-height: 0.98;
+  letter-spacing: -0.045em;
+
+  em {
+    font-style: normal;
+    color: $blue;
+  }
+
+  .line {
+    display: block;
+    overflow: hidden;
+    padding-bottom: 0.08em; // room for descenders
+
+    > span {
+      display: block;
+      transform: translateY(112%);
+      animation: rise 1s $ease forwards;
+    }
+  }
+
+  .line:nth-child(2) > span {
+    animation-delay: 0.12s;
+  }
+}
+
+@keyframes rise {
+  to {
+    transform: translateY(0);
+  }
+}
+
+/* ---------- Portrait ---------- */
+.portrait {
+  position: relative;
+  justify-self: end;
+  width: min(100%, 410px);
+  z-index: 1;
+
+  &__frame {
     position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
+
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 18px -18px -18px 18px;
+      border: 1px solid $blue-line;
+      border-radius: $r-lg;
+    }
+
+    img {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 1;
+      object-fit: cover;
+      object-position: center 18%;
+      border-radius: $r-lg;
+      animation: imgIn 1.2s $ease 0.25s both;
+    }
   }
 
-  &__mark {
+  figcaption {
+    position: relative;
     display: grid;
-    place-items: center;
-    width: 68px;
-    height: 68px;
-    font-family: $font-display;
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: $white;
-    background: linear-gradient(135deg, $accent, $accent-2);
-    border-radius: 20px;
-    box-shadow: 0 10px 24px rgba($accent, 0.32);
-  }
+    gap: 4px;
+    margin-top: 34px;
 
-  &__status {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 7px 14px;
-    font-size: 0.78rem;
-    font-weight: 600;
-    color: #1c6b4a;
-    background: #e5f4ec;
-    border-radius: $radius-pill;
-  }
-
-  &__name {
-    position: relative;
-    margin-top: 22px;
-    font-family: $font-display;
-    font-size: 1.45rem;
-    font-weight: 700;
-    color: $ink;
-    letter-spacing: -0.02em;
-  }
-
-  &__role {
-    position: relative;
-    margin-top: 6px;
-    font-size: 0.92rem;
-    color: $accent-strong;
-    font-weight: 500;
-  }
-
-  &__meta {
-    position: relative;
-    display: grid;
-    gap: 8px;
-    margin-top: 20px;
-    padding-top: 20px;
-    border-top: 1px dashed $line;
-    font-size: 0.88rem;
-    color: $muted;
-  }
-
-  &__tags {
-    position: relative;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-top: 22px;
+    strong {
+      font-family: $font-display;
+      font-size: 1rem;
+      font-weight: 500;
+    }
 
     span {
-      padding: 7px 13px;
-      font-family: $font-display;
-      font-size: 0.72rem;
-      font-weight: 600;
-      letter-spacing: 0.03em;
-      color: $ink-2;
-      background: $paper-2;
-      border: 1px solid $line;
-      border-radius: $radius-pill;
+      font-size: 0.8rem;
+      color: $muted;
     }
   }
 }
 
-/* ---------- Floating chips ---------- */
-.float-chip {
-  position: absolute;
-  padding: 11px 18px;
-  font-family: $font-display;
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: $ink;
-  background: $surface;
-  border: 1px solid $line;
-  border-radius: $radius-pill;
-  box-shadow: $shadow;
-  animation: float 5.5s ease-in-out infinite;
-  white-space: nowrap;
-
-  &--1 {
-    top: -20px;
-    left: -26px;
-    color: $accent-strong;
-    background: $accent-soft;
-    border-color: rgba($accent, 0.25);
+@keyframes imgIn {
+  from {
+    clip-path: inset(0 0 100% 0);
   }
-
-  &--2 {
-    bottom: 32px;
-    right: -30px;
-    animation-delay: -2.6s;
-  }
-}
-
-@keyframes float {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-12px);
+  to {
+    clip-path: inset(0 0 0 0);
   }
 }
 
 /* ---------- Responsive ---------- */
-@include respond-max($bp-lg) {
-  .hero__grid {
+@media (max-width: $bp-lg) {
+  .hero__inner {
     grid-template-columns: 1fr;
+    gap: 56px;
   }
 
-  .hero__visual {
-    max-width: 480px;
+  .portrait {
+    justify-self: start;
+    width: min(100%, 360px);
   }
 
-  .float-chip--1 {
-    left: -8px;
-  }
-
-  .float-chip--2 {
-    right: -8px;
-  }
-}
-
-@include respond-max($bp-md) {
-  .hero__stats {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 22px 12px;
+  .hero__gridbg {
+    mask-image: radial-gradient(ellipse 80% 50% at 40% 15%, #000 0%, transparent 78%);
+    -webkit-mask-image: radial-gradient(ellipse 80% 50% at 40% 15%, #000 0%, transparent 78%);
   }
 }
 
-@include respond-max($bp-sm) {
-  .hero__actions .btn {
-    width: 100%;
-  }
-
-  .float-chip {
-    display: none;
+@media (max-width: 480px) {
+  .hero__cta {
+    gap: 18px;
   }
 }

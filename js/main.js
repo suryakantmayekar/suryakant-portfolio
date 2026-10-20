@@ -1,7 +1,6 @@
 /* ============================================================
-   Suryakant Mayekar — Freelance Profile
-   Vanilla JS: scroll reveals, counters, nav, form
-   No dependencies.
+   V2 — Dark editorial theme
+   Vanilla JS: reveals, counters, nav, pointer glow, form
    ============================================================ */
 (function () {
   'use strict';
@@ -9,24 +8,25 @@
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   /* ----------------------------------------------------------
-     1. Header state + scroll progress bar
+     1. Header state + scroll progress
      ---------------------------------------------------------- */
-  var header = document.querySelector('.site-header');
-  var progressBar = document.querySelector('.scroll-progress__bar');
+  var header = document.querySelector('.bar');
+  var progress = document.querySelector('.scroll-line span');
   var ticking = false;
 
   function onScroll() {
     if (ticking) return;
     ticking = true;
+
     window.requestAnimationFrame(function () {
       var y = window.scrollY || window.pageYOffset;
 
-      if (header) header.classList.toggle('is-scrolled', y > 12);
+      if (header) header.classList.toggle('is-scrolled', y > 10);
 
-      if (progressBar) {
+      if (progress) {
         var doc = document.documentElement;
         var max = doc.scrollHeight - doc.clientHeight;
-        progressBar.style.width = max > 0 ? (y / max) * 100 + '%' : '0%';
+        progress.style.width = max > 0 ? (y / max) * 100 + '%' : '0%';
       }
 
       ticking = false;
@@ -37,39 +37,36 @@
   onScroll();
 
   /* ----------------------------------------------------------
-     2. Mobile navigation
+     2. Mobile menu
      ---------------------------------------------------------- */
-  var toggle = document.querySelector('.nav-toggle');
-  var nav = document.querySelector('.nav');
+  var burger = document.querySelector('.burger');
+  var menu = document.querySelector('.menu');
 
   function closeMenu() {
-    if (!toggle || !nav) return;
-    toggle.setAttribute('aria-expanded', 'false');
-    toggle.setAttribute('aria-label', 'Open menu');
-    nav.classList.remove('is-open');
+    if (!burger || !menu) return;
+    burger.setAttribute('aria-expanded', 'false');
+    burger.setAttribute('aria-label', 'Open menu');
+    menu.classList.remove('is-open');
     document.body.classList.remove('menu-open');
   }
 
-  if (toggle && nav) {
-    toggle.addEventListener('click', function () {
-      var open = toggle.getAttribute('aria-expanded') === 'true';
-      toggle.setAttribute('aria-expanded', String(!open));
-      toggle.setAttribute('aria-label', open ? 'Open menu' : 'Close menu');
-      nav.classList.toggle('is-open', !open);
+  if (burger && menu) {
+    burger.addEventListener('click', function () {
+      var open = burger.getAttribute('aria-expanded') === 'true';
+      burger.setAttribute('aria-expanded', String(!open));
+      burger.setAttribute('aria-label', open ? 'Open menu' : 'Close menu');
+      menu.classList.toggle('is-open', !open);
       document.body.classList.toggle('menu-open', !open);
     });
 
-    // Close when a link is chosen
-    nav.addEventListener('click', function (e) {
+    menu.addEventListener('click', function (e) {
       if (e.target.closest('a')) closeMenu();
     });
 
-    // Close on Escape
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape') closeMenu();
     });
 
-    // Reset when switching back to desktop
     var desktop = window.matchMedia('(min-width: 1025px)');
     var onChange = function (e) {
       if (e.matches) closeMenu();
@@ -79,25 +76,25 @@
   }
 
   /* ----------------------------------------------------------
-     3. On-scroll reveal animations
+     3. Reveal on scroll
      ---------------------------------------------------------- */
   var revealEls = document.querySelectorAll('[data-reveal]');
 
   if (reduceMotion || !('IntersectionObserver' in window)) {
     revealEls.forEach(function (el) {
-      el.classList.add('is-visible');
+      el.classList.add('in');
     });
   } else {
     var revealObserver = new IntersectionObserver(
       function (entries, obs) {
         entries.forEach(function (entry) {
           if (entry.isIntersecting) {
-            entry.target.classList.add('is-visible');
+            entry.target.classList.add('in');
             obs.unobserve(entry.target);
           }
         });
       },
-      { threshold: 0.12, rootMargin: '0px 0px -8% 0px' }
+      { threshold: 0.12, rootMargin: '0px 0px -6% 0px' }
     );
 
     revealEls.forEach(function (el) {
@@ -106,27 +103,27 @@
   }
 
   /* ----------------------------------------------------------
-     4. Animated counters (hero stats)
+     4. Counters
      ---------------------------------------------------------- */
-  var counters = document.querySelectorAll('.counter');
+  var counters = document.querySelectorAll('.count');
 
   function animateCounter(el) {
     var target = parseInt(el.getAttribute('data-count'), 10) || 0;
+
     if (reduceMotion) {
       el.textContent = String(target);
       return;
     }
 
-    var duration = 1400;
+    var duration = 1300;
     var start = null;
 
     function step(ts) {
       if (!start) start = ts;
-      var progress = Math.min((ts - start) / duration, 1);
-      // ease-out cubic
-      var eased = 1 - Math.pow(1 - progress, 3);
+      var p = Math.min((ts - start) / duration, 1);
+      var eased = 1 - Math.pow(1 - p, 3);
       el.textContent = String(Math.round(eased * target));
-      if (progress < 1) window.requestAnimationFrame(step);
+      if (p < 1) window.requestAnimationFrame(step);
     }
 
     window.requestAnimationFrame(step);
@@ -147,6 +144,7 @@
         },
         { threshold: 0.6 }
       );
+
       counters.forEach(function (el) {
         counterObserver.observe(el);
       });
@@ -154,13 +152,13 @@
   }
 
   /* ----------------------------------------------------------
-     5. Active nav link highlighting
+     5. Active nav link
      ---------------------------------------------------------- */
-  var navLinks = Array.prototype.slice.call(document.querySelectorAll('.nav__link'));
+  var navLinks = Array.prototype.slice.call(document.querySelectorAll('.menu a'));
   var sections = navLinks
     .map(function (link) {
-      var id = link.getAttribute('href');
-      return id && id.charAt(0) === '#' ? document.querySelector(id) : null;
+      var href = link.getAttribute('href');
+      return href && href.charAt(0) === '#' ? document.querySelector(href) : null;
     })
     .filter(Boolean);
 
@@ -189,7 +187,7 @@
           );
         });
       },
-      { rootMargin: '-40% 0px -55% 0px', threshold: 0 }
+      { rootMargin: '-42% 0px -52% 0px', threshold: 0 }
     );
 
     sections.forEach(function (section) {
@@ -198,7 +196,146 @@
   }
 
   /* ----------------------------------------------------------
-     6. Contact form → Netlify Forms
+     6. Pointer-follow glow in the hero
+     ---------------------------------------------------------- */
+  var hero = document.querySelector('.hero');
+  var finePointer = window.matchMedia('(pointer: fine)').matches;
+
+  if (hero && finePointer && !reduceMotion) {
+    var heroTicking = false;
+    var lastEvent = null;
+
+    hero.addEventListener('pointermove', function (e) {
+      lastEvent = e;
+      if (heroTicking) return;
+      heroTicking = true;
+
+      window.requestAnimationFrame(function () {
+        var rect = hero.getBoundingClientRect();
+        var x = ((lastEvent.clientX - rect.left) / rect.width) * 100;
+        var y = ((lastEvent.clientY - rect.top) / rect.height) * 100;
+        hero.style.setProperty('--mx', x.toFixed(1) + '%');
+        hero.style.setProperty('--my', y.toFixed(1) + '%');
+        heroTicking = false;
+      });
+    });
+  }
+
+  /* ----------------------------------------------------------
+     7. Custom select (progressively enhances the native <select>)
+     ---------------------------------------------------------- */
+  var selectWrap = document.querySelector('[data-select]');
+  var nativeSelect = document.getElementById('v2-topic');
+  var selectTrigger = document.getElementById('topic-trigger');
+  var selectValue = document.getElementById('topic-value');
+  var selectReset = null;
+
+  if (selectWrap && nativeSelect && selectTrigger && selectValue) {
+    var selectMenu = selectWrap.querySelector('.select__menu');
+    var selectOptions = Array.prototype.slice.call(
+      selectMenu.querySelectorAll('[role="option"]')
+    );
+    var placeholder = selectValue.textContent;
+
+    nativeSelect.setAttribute('tabindex', '-1');
+    nativeSelect.setAttribute('aria-hidden', 'true');
+
+    function setActiveOption(index) {
+      selectOptions.forEach(function (option, i) {
+        option.classList.toggle('is-active', i === index);
+      });
+      if (selectOptions[index]) selectOptions[index].focus();
+    }
+
+    function openSelect() {
+      selectMenu.hidden = false;
+      selectTrigger.setAttribute('aria-expanded', 'true');
+      selectWrap.classList.add('is-open');
+
+      var selected = selectOptions.findIndex(function (o) {
+        return o.getAttribute('aria-selected') === 'true';
+      });
+      setActiveOption(selected >= 0 ? selected : 0);
+    }
+
+    function closeSelect(refocus) {
+      selectMenu.hidden = true;
+      selectTrigger.setAttribute('aria-expanded', 'false');
+      selectWrap.classList.remove('is-open');
+      if (refocus) selectTrigger.focus();
+    }
+
+    function chooseOption(option) {
+      selectOptions.forEach(function (o) {
+        o.setAttribute('aria-selected', String(o === option));
+      });
+      nativeSelect.value = option.getAttribute('data-value');
+      selectValue.textContent = option.textContent.trim();
+      selectValue.classList.remove('is-placeholder');
+      selectTrigger.classList.remove('is-invalid');
+      closeSelect(true);
+    }
+
+    selectReset = function () {
+      selectOptions.forEach(function (o) {
+        o.setAttribute('aria-selected', 'false');
+        o.classList.remove('is-active');
+      });
+      nativeSelect.value = '';
+      selectValue.textContent = placeholder;
+      selectValue.classList.add('is-placeholder');
+      closeSelect(false);
+    };
+
+    selectTrigger.addEventListener('click', function () {
+      if (selectMenu.hidden) openSelect();
+      else closeSelect(true);
+    });
+
+    selectTrigger.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+        e.preventDefault();
+        openSelect();
+      }
+    });
+
+    selectOptions.forEach(function (option, index) {
+      option.addEventListener('click', function () {
+        chooseOption(option);
+      });
+
+      option.addEventListener('keydown', function (e) {
+        if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          setActiveOption((index + 1) % selectOptions.length);
+        } else if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          setActiveOption((index - 1 + selectOptions.length) % selectOptions.length);
+        } else if (e.key === 'Home') {
+          e.preventDefault();
+          setActiveOption(0);
+        } else if (e.key === 'End') {
+          e.preventDefault();
+          setActiveOption(selectOptions.length - 1);
+        } else if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          chooseOption(option);
+        } else if (e.key === 'Escape') {
+          e.preventDefault();
+          closeSelect(true);
+        } else if (e.key === 'Tab') {
+          closeSelect(false);
+        }
+      });
+    });
+
+    document.addEventListener('click', function (e) {
+      if (!selectMenu.hidden && !selectWrap.contains(e.target)) closeSelect(false);
+    });
+  }
+
+  /* ----------------------------------------------------------
+     8. Contact form → Netlify Forms
      ---------------------------------------------------------- */
   var form = document.getElementById('contact-form');
   var statusEl = document.getElementById('form-status');
@@ -228,7 +365,9 @@
     }
 
     function validate() {
-      var fields = form.querySelectorAll('input:not([type="hidden"]), select, textarea');
+      var fields = form.querySelectorAll(
+        'input:not([type="hidden"]), select:not(.native-select), textarea'
+      );
       var firstInvalid = null;
 
       fields.forEach(function (field) {
@@ -242,12 +381,17 @@
         if (invalid && !firstInvalid) firstInvalid = field;
       });
 
+      // custom select (the real value lives in the hidden native select)
+      if (nativeSelect && !nativeSelect.value) {
+        if (selectTrigger) selectTrigger.classList.add('is-invalid');
+        if (!firstInvalid) firstInvalid = selectTrigger;
+      }
+
       return firstInvalid;
     }
 
     function mailtoFallback(data) {
-      var subject =
-        'Website enquiry — ' + data.get('topic') + ' (' + data.get('name') + ')';
+      var subject = 'Website enquiry — ' + data.get('topic') + ' (' + data.get('name') + ')';
       var body =
         'Name: ' + data.get('name') + '\n' +
         'Email: ' + data.get('email') + '\n' +
@@ -273,9 +417,8 @@
 
       var data = new FormData(form);
 
-      // Netlify Forms only accepts submissions on the deployed site
       if (isLocal || window.location.protocol === 'file:') {
-        setStatus('error', 'Netlify Forms works on your live site — opening your email app instead.');
+        setStatus('error', 'Netlify Forms works on the live site — opening your email app instead.');
         mailtoFallback(data);
         return;
       }
@@ -297,6 +440,7 @@
               '. Your enquiry has been sent — I will get back to you soon.'
           );
           form.reset();
+          if (selectReset) selectReset();
         })
         .catch(function () {
           setStatus(
@@ -310,14 +454,13 @@
         });
     });
 
-    // Clear invalid state while typing
     form.addEventListener('input', function (e) {
       if (e.target.classList) e.target.classList.remove('is-invalid');
     });
   }
 
   /* ----------------------------------------------------------
-     7. Footer year
+     8. Footer year
      ---------------------------------------------------------- */
   var yearEl = document.getElementById('year');
   if (yearEl) yearEl.textContent = String(new Date().getFullYear());
