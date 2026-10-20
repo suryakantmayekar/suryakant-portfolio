@@ -582,8 +582,7 @@
               </span>
               <div>
                 <small>Email</small>
-                <!-- PLACEHOLDER: replace with your real email -->
-                <a href="mailto:hello@suryakantmayekar.com">hello@suryakantmayekar.com</a>
+                <a href="mailto:suryakantmayekar@gmail.com">suryakantmayekar@gmail.com</a>
               </div>
             </li>
             <li>
@@ -618,7 +617,14 @@
           </ul>
         </div>
 
-        <form class="contact-form" id="contact-form" novalidate data-reveal="right" style="--reveal-delay:120ms">
+        <form class="contact-form" id="contact-form" name="contact" method="POST"
+              data-netlify="true" netlify-honeypot="bot-field" novalidate
+              data-reveal="right" style="--reveal-delay:120ms">
+          <input type="hidden" name="form-name" value="contact">
+          <p class="hp-field" aria-hidden="true">
+            <label>Leave this field empty <input type="text" name="bot-field" tabindex="-1" autocomplete="off"></label>
+          </p>
+
           <div class="form-row">
             <label class="field">
               <span>Your name</span>
@@ -649,10 +655,11 @@
           </label>
 
           <button class="btn btn--primary btn--block" type="submit">
-            Send enquiry
+            <span class="btn__label">Send enquiry</span>
             <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
           </button>
-          <p class="form-note" role="status">Submitting opens your email app with the details pre-filled &mdash; nothing is stored on this site.</p>
+          <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
+          <p class="form-note">Your details are only used to reply to your enquiry.</p>
         </form>
       </div>
     </section>

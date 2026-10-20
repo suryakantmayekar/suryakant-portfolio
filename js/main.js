@@ -198,21 +198,42 @@
   }
 
   /* ----------------------------------------------------------
-     6. Contact form → mailto
+     6. Contact form → Netlify Forms
      ---------------------------------------------------------- */
   var form = document.getElementById('contact-form');
+  var statusEl = document.getElementById('form-status');
+  var submitBtn = form ? form.querySelector('button[type="submit"]') : null;
 
   if (form) {
-    // PLACEHOLDER: replace with your real email address
-    var CONTACT_EMAIL = 'hello@suryakantmayekar.com';
+    var CONTACT_EMAIL = 'suryakantmayekar@gmail.com';
+    var isLocal = /^(localhost|127\.0\.0\.1|\[::1\]|)$/.test(window.location.hostname);
 
-    form.addEventListener('submit', function (e) {
-      e.preventDefault();
+    function escapeHtml(str) {
+      return String(str).replace(/[&<>"']/g, function (c) {
+        return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+      });
+    }
 
-      var fields = form.querySelectorAll('input, select, textarea');
+    function setStatus(type, message) {
+      if (!statusEl) return;
+      statusEl.className = 'form-status' + (type ? ' is-' + type : '');
+      statusEl.innerHTML = message || '';
+    }
+
+    function setLoading(loading) {
+      if (!submitBtn) return;
+      submitBtn.disabled = loading;
+      var label = submitBtn.querySelector('.btn__label');
+      if (label) label.textContent = loading ? 'Sending…' : 'Send enquiry';
+    }
+
+    function validate() {
+      var fields = form.querySelectorAll('input:not([type="hidden"]), select, textarea');
       var firstInvalid = null;
 
       fields.forEach(function (field) {
+        if (field.name === 'bot-field') return;
+
         var invalid = !field.value.trim();
         if (field.type === 'email' && field.value.trim()) {
           invalid = !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(field.value.trim());
@@ -221,12 +242,10 @@
         if (invalid && !firstInvalid) firstInvalid = field;
       });
 
-      if (firstInvalid) {
-        firstInvalid.focus();
-        return;
-      }
+      return firstInvalid;
+    }
 
-      var data = new FormData(form);
+    function mailtoFallback(data) {
       var subject =
         'Website enquiry — ' + data.get('topic') + ' (' + data.get('name') + ')';
       var body =
@@ -239,6 +258,56 @@
         'mailto:' + CONTACT_EMAIL +
         '?subject=' + encodeURIComponent(subject) +
         '&body=' + encodeURIComponent(body);
+    }
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      setStatus('', '');
+
+      var firstInvalid = validate();
+      if (firstInvalid) {
+        firstInvalid.focus();
+        setStatus('error', 'Please complete the highlighted fields.');
+        return;
+      }
+
+      var data = new FormData(form);
+
+      // Netlify Forms only accepts submissions on the deployed site
+      if (isLocal || window.location.protocol === 'file:') {
+        setStatus('error', 'Netlify Forms works on your live site — opening your email app instead.');
+        mailtoFallback(data);
+        return;
+      }
+
+      setLoading(true);
+
+      fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams(data).toString()
+      })
+        .then(function (res) {
+          if (!res.ok) throw new Error('HTTP ' + res.status);
+
+          var firstName = String(data.get('name') || '').trim().split(' ')[0];
+          setStatus(
+            'success',
+            'Thanks' + (firstName ? ', ' + escapeHtml(firstName) : '') +
+              '. Your enquiry has been sent — I will get back to you soon.'
+          );
+          form.reset();
+        })
+        .catch(function () {
+          setStatus(
+            'error',
+            'Something went wrong sending the form. Please email me directly at ' +
+              '<a href="mailto:' + CONTACT_EMAIL + '">' + CONTACT_EMAIL + '</a>.'
+          );
+        })
+        .finally(function () {
+          setLoading(false);
+        });
     });
 
     // Clear invalid state while typing

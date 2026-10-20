@@ -10,7 +10,7 @@ A modern, responsive, client-facing freelance profile site built with **HTML, SC
 - ✨ On-scroll reveal animations via `IntersectionObserver` (fade / slide / scale variants + stagger delays)
 - 📊 Animated hero counters, scroll progress bar, infinite tech marquee
 - 🧭 Sticky header with scroll state + active-section nav highlighting
-- 📬 Contact form that opens a pre-filled `mailto:` (nothing stored, no backend needed)
+- 📬 Netlify Forms contact form with inline validation, spam honeypot and success/error states (falls back to `mailto:` in local development)
 - ♿ Accessible: skip link, focus rings, ARIA states, `prefers-reduced-motion` support
 - 🔍 SEO basics: meta description, Open Graph, JSON-LD Person schema
 
@@ -50,14 +50,28 @@ css/main.css        # compiled output (do not edit directly)
 js/main.js          # all interactivity
 ```
 
+## Contact form (Netlify Forms)
+
+The contact form posts to **Netlify Forms** — no backend or third-party service needed.
+
+1. Deploy the site (the form is detected at deploy time because of `data-netlify="true"`).
+2. In Netlify: **Forms → contact → Form notifications → Add notification → Email notification**
+3. Set the recipient to `suryakantmayekar@gmail.com` and save.
+4. Submit the form once on the live site to test; submissions appear under **Forms** in Netlify.
+
+Notes:
+- Netlify Forms works **only on the deployed site** — locally the form opens your email app instead.
+- A hidden `bot-field` honeypot + Netlify's built-in spam filtering protect against bots.
+- The free plan includes a monthly submission allowance (100 submissions/month at time of writing).
+
 ## Editing content
 
 - **Text, projects, pricing** → `index.html`
 - **Colors & fonts** → `scss/_variables.scss` (then `npm run build`)
-- **Placeholder contact details** → search `index.html` & `js/main.js` for `PLACEHOLDER`:
-  - Email: `hello@suryakantmayekar.com`
+- **Remaining placeholders** → search `index.html` for `PLACEHOLDER`:
   - Phone/WhatsApp: `+91 XXXXX XXXXX`
   - LinkedIn: profile URL in the contact section
+- **Email** is already set to `suryakantmayekar@gmail.com` in `index.html`, `js/main.js`, and Netlify form notifications.
 
 ## Adding a new scroll animation
 

@@ -102,4 +102,16 @@
   &--block {
     width: 100%;
   }
+
+  // ---- Disabled / sending state ----
+  &:disabled {
+    opacity: 0.65;
+    cursor: wait;
+    transform: none;
+    box-shadow: none;
+
+    &::after {
+      display: none;
+    }
+  }
 }
