@@ -68,10 +68,10 @@ Notes:
 
 - **Text, projects, pricing** → `index.html`
 - **Colors & fonts** → `scss/_variables.scss` (then `npm run build`)
-- **Remaining placeholders** → search `index.html` for `PLACEHOLDER`:
-  - Phone/WhatsApp: `+91 XXXXX XXXXX`
-  - LinkedIn: profile URL in the contact section
-- **Email** is already set to `suryakantmayekar@gmail.com` in `index.html`, `js/main.js`, and Netlify form notifications.
+- **Contact details** are live and can be changed at the top-and-contact sections in `index.html`:
+  - Email: `suryakantmayekar@gmail.com`
+  - Phone / WhatsApp: `+91 98709 17491` (`tel:+919870917491`)
+  - LinkedIn: `https://www.linkedin.com/in/suryakant-mayekar-45994b12/`
 
 ## Adding a new scroll animation
 
