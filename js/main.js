@@ -8,6 +8,31 @@
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   /* ----------------------------------------------------------
+     Analytics: push named events to the GTM dataLayer
+     ---------------------------------------------------------- */
+  function trackEvent(name, params) {
+    window.dataLayer = window.dataLayer || [];
+    var payload = { event: name };
+
+    if (params) {
+      Object.keys(params).forEach(function (key) {
+        var value = params[key];
+        if (value !== undefined && value !== null && value !== '') {
+          payload[key] = value;
+        }
+      });
+    }
+
+    window.dataLayer.push(payload);
+  }
+
+  trackEvent('page_view', {
+    page_path: window.location.pathname + window.location.search,
+    page_title: document.title,
+    page_location: window.location.href
+  });
+
+  /* ----------------------------------------------------------
      1. Header state + scroll progress
      ---------------------------------------------------------- */
   var header = document.querySelector('.bar');
@@ -439,6 +464,12 @@
             'Thanks' + (firstName ? ', ' + escapeHtml(firstName) : '') +
               '. Your enquiry has been sent — I will get back to you soon.'
           );
+
+          trackEvent('form_submit', {
+            form_name: form.getAttribute('name') || 'contact',
+            service: data.get('topic') || ''
+          });
+
           form.reset();
           if (selectReset) selectReset();
         })
@@ -586,7 +617,74 @@
   }
 
   /* ----------------------------------------------------------
-     10. Footer year
+     10. Contact clicks + section interest
+     ---------------------------------------------------------- */
+  document.addEventListener('click', function (e) {
+    var target = e.target;
+    var link = target && target.closest ? target.closest('a[href]') : null;
+    if (!link) return;
+
+    var href = link.getAttribute('href') || '';
+    var text = (link.textContent || '').replace(/\s+/g, ' ').trim();
+
+    if (/wa\.me|api\.whatsapp\.com|web\.whatsapp\.com|whatsapp\.com/i.test(href)) {
+      trackEvent('whatsapp_click', {
+        link_url: href,
+        link_text: text,
+        contact_method: 'whatsapp'
+      });
+      return;
+    }
+
+    if (/^tel:/i.test(href)) {
+      trackEvent('phone_click', {
+        phone_number: href.replace(/^tel:/i, ''),
+        link_text: text,
+        contact_method: 'phone'
+      });
+      return;
+    }
+
+    if (/^mailto:/i.test(href)) {
+      trackEvent('email_click', {
+        email_address: href.replace(/^mailto:/i, '').split('?')[0],
+        link_text: text,
+        contact_method: 'email'
+      });
+    }
+  });
+
+  function trackSectionView(el, eventName, params) {
+    if (!el || !('IntersectionObserver' in window)) return;
+
+    var fired = false;
+    var observer = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (entry) {
+          if (!entry.isIntersecting || fired) return;
+          fired = true;
+          trackEvent(eventName, params);
+          observer.disconnect();
+        });
+      },
+      { threshold: 0.3 }
+    );
+
+    observer.observe(el);
+  }
+
+  trackSectionView(document.getElementById('services'), 'service_view', {
+    section: 'services',
+    service_count: 5
+  });
+
+  trackSectionView(document.getElementById('work'), 'portfolio_view', {
+    section: 'work',
+    project_count: 8
+  });
+
+  /* ----------------------------------------------------------
+     11. Footer year
      ---------------------------------------------------------- */
   var yearEl = document.getElementById('year');
   if (yearEl) yearEl.textContent = String(new Date().getFullYear());
