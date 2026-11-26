@@ -460,7 +460,133 @@
   }
 
   /* ----------------------------------------------------------
-     8. Footer year
+     9. Cursor-follow project preview
+     ---------------------------------------------------------- */
+  var workPreview = document.querySelector('.work-preview');
+  var previewLinks = Array.prototype.slice.call(document.querySelectorAll('[data-preview]'));
+  var otherList = document.querySelector('.other__list');
+
+  if (
+    workPreview &&
+    previewLinks.length &&
+    otherList &&
+    window.matchMedia('(pointer: fine)').matches
+  ) {
+    var previewImg = workPreview.querySelector('img');
+    var previewLabel = workPreview.querySelector('.work-preview__label');
+    var previewTargetX = 0;
+    var previewTargetY = 0;
+    var previewX = 0;
+    var previewY = 0;
+    var previewFrame = null;
+    var previewShown = false;
+
+    function clampPreview(value, min, max) {
+      return Math.max(min, Math.min(max, value));
+    }
+
+    function paintPreview() {
+      var ease = reduceMotion ? 1 : 0.18;
+      previewX += (previewTargetX - previewX) * ease;
+      previewY += (previewTargetY - previewY) * ease;
+      workPreview.style.transform =
+        'translate3d(' + previewX.toFixed(1) + 'px,' + previewY.toFixed(1) + 'px,0)';
+
+      if (
+        Math.abs(previewTargetX - previewX) > 0.3 ||
+        Math.abs(previewTargetY - previewY) > 0.3
+      ) {
+        previewFrame = window.requestAnimationFrame(paintPreview);
+      } else {
+        previewFrame = null;
+      }
+    }
+
+    function positionPreview(x, y, snap) {
+      var offset = 26;
+      var width = workPreview.offsetWidth || 380;
+      var height = workPreview.offsetHeight || 230;
+      var left = x + offset;
+
+      if (left + width > window.innerWidth - 16) left = x - width - offset;
+      left = clampPreview(left, 16, window.innerWidth - width - 16);
+
+      var top = clampPreview(y - height / 2, 16, window.innerHeight - height - 16);
+
+      previewTargetX = left;
+      previewTargetY = top;
+
+      if (snap) {
+        previewX = left;
+        previewY = top;
+      }
+
+      if (!previewFrame) previewFrame = window.requestAnimationFrame(paintPreview);
+    }
+
+    previewLinks.forEach(function (link) {
+      link.addEventListener('pointerenter', function (e) {
+        var src = link.getAttribute('data-preview');
+        if (!src) return;
+
+        if (previewImg.getAttribute('src') !== src) previewImg.setAttribute('src', src);
+
+        var nameEl = link.querySelector('.other__name');
+        previewImg.alt = (nameEl ? nameEl.textContent : 'Project') + ' website preview';
+        previewLabel.textContent = link.getAttribute('data-preview-label') || '';
+
+        workPreview.classList.add('is-visible');
+        previewShown = true;
+        positionPreview(e.clientX, e.clientY, previewX === 0 && previewY === 0);
+      });
+    });
+
+    otherList.addEventListener('pointermove', function (e) {
+      if (previewShown) positionPreview(e.clientX, e.clientY, false);
+    });
+
+    otherList.addEventListener('pointerleave', function () {
+      previewShown = false;
+      workPreview.classList.remove('is-visible');
+    });
+
+    window.addEventListener(
+      'scroll',
+      function () {
+        if (!previewShown) return;
+        previewShown = false;
+        workPreview.classList.remove('is-visible');
+      },
+      { passive: true }
+    );
+
+    window.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') {
+        previewShown = false;
+        workPreview.classList.remove('is-visible');
+      }
+    });
+
+    // Warm the preview images after the page has settled.
+    var warmPreviews = function () {
+      previewLinks.forEach(function (link) {
+        var src = link.getAttribute('data-preview');
+        if (src) {
+          var img = new Image();
+          img.src = src;
+        }
+      });
+    };
+
+    if ('requestIdleCallback' in window) {
+      window.requestIdleCallback(warmPreviews, { timeout: 2500 });
+    } else {
+      window.setTimeout(warmPreviews, 1500);
+    }
+  }
+
+  /* ----------------------------------------------------------
+     10. Footer year
      ---------------------------------------------------------- */
   var yearEl = document.getElementById('year');
   if (yearEl) yearEl.textContent = String(new Date().getFullYear());
