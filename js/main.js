@@ -680,7 +680,7 @@
 
   trackSectionView(document.getElementById('work'), 'portfolio_view', {
     section: 'work',
-    project_count: 8
+    project_count: 9
   });
 
   /* ----------------------------------------------------------
